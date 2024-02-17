@@ -1,9 +1,10 @@
 import './App.css';
+import Canvas from './components/Canvas.tsx';
 
 const App = () => {
   return (
     <>
-      <h1>Vite + React</h1>
+      <Canvas />
     </>
   );
 };
