@@ -1,7 +1,9 @@
+import Canvas from './Canvas';
+
 const Test1 = () => {
   return (
     <>
-      <p>test1</p>
+      <Canvas />
     </>
   );
 };

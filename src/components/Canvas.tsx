@@ -2,35 +2,41 @@ import React, { useRef, useEffect } from 'react';
 
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  let raf: number;
 
   useEffect(() => {
     if (canvasRef.current) {
       const ctx = canvasRef.current.getContext('2d');
 
-      const onResize = () => {
-        if (canvasRef.current) {
-          canvasRef.current.width = window.innerWidth;
-          canvasRef.current.height = window.innerHeight;
+      const animate = () => {
+        ctx?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
 
-          if (ctx) {
-            ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-          }
-        }
+        raf = requestAnimationFrame(animate);
       };
 
-      window.addEventListener('resize', onResize);
-      onResize();
+      animate();
       return () => {
-        window.removeEventListener('resize', onResize);
+        cancelAnimationFrame(raf);
       };
     }
   }, [canvasRef.current]);
 
-  return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
-    </div>
-  );
+  const onResize = () => {
+    if (canvasRef.current) {
+      canvasRef.current.width = window.innerWidth;
+      canvasRef.current.height = window.innerHeight;
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', onResize);
+    onResize();
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default Canvas;
