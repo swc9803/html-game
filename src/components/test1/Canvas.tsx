@@ -1,8 +1,18 @@
 import React, { useRef, useEffect } from 'react';
 
+interface Mouse {
+  x: number | undefined;
+  y: number | undefined;
+}
+
 const Canvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   let raf: number;
+
+  let mouse: Mouse = {
+    x: undefined,
+    y: undefined,
+  };
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -35,6 +45,14 @@ const Canvas: React.FC = () => {
       };
 
       drawCircle();
+
+      window.addEventListener('mousemove', (e: MouseEvent) => {
+        mouse = {
+          x: e.clientX,
+          y: e.clientY,
+        };
+        console.log(mouse.x);
+      });
 
       return () => {
         cancelAnimationFrame(raf);
